@@ -13,6 +13,7 @@ class PseudoCube {
 		this.colour = colour;
 		this.sideA = lerpColor(palette.BLACK, this.colour, 0.7);
 		this.sideB = lerpColor(palette.BLACK, this.colour, 0.6);
+		this.decor = lerpColor(palette.BLACK, this.colour, 0.4);
 	}
 
 	// Methods
@@ -33,7 +34,7 @@ class PseudoCube {
 		let d = this.centerDistRatio();
 		const DIVBY = 2;
 		let m = map(d, 0, 0.5, 0, DIVBY);
-		return (m * map(this.height, 5, 30, 1, DIVBY)) / DIVBY
+		return (m * map(this.height, 5, 30, 1, DIVBY)) / DIVBY;
 	}
 
 	displacementAngle() {
@@ -155,37 +156,90 @@ class PseudoCube {
 		rect(displaced.x, displaced.y, roof.x, roof.y);
 	}
 
-	update() {
-	}
+	update() {}
 
 	isOnscreen() {
-		let size = vmult(this.size, 2);
-		return this.pos.x > -size.x && this.pos.x < width + size.x && this.pos.y > -size.y && this.pos.y < height + size.y;
+		let size = vmult(this.size, 10);
+		return (
+			this.pos.x > -size.x &&
+			this.pos.x < width + size.x + 300 &&
+			this.pos.y > -size.y &&
+			this.pos.y < height + size.y
+		);
 	}
 }
 
-
-class PseudoCubeParticle extends PseudoCube {
+class ParticlePseudoCube extends PseudoCube {
 	constructor(pos, size, vel, height, colour) {
 		super(pos, size, height, colour);
 		this.vel = vel;
-		this.height = 9;
+		this.height = 60;
 		this.ogHeight = this.height;
+		this.connection = this.closestCube();
 	}
 
 	update() {
 		this.pos.add(this.vel);
 		this.height = map(this.centerDistRatio(), 0, 0.5, 50, 20);
-		this.computeColour(lerpColor(palette.GRAD1, palette.GRAD2, map(this.pos.x, 0, width, 0, 1)));
+		this.computeColour(
+			lerpColor(
+				palette.GRAD1,
+				palette.GRAD2,
+				map(this.pos.x, 0, width, 0, 1)
+			)
+		);
 	}
 
 	// Methods
 	static fromRandom() {
-		return new PseudoCubeParticle(
+		return new ParticlePseudoCube(
 			vadd(randVec(), vec(500, 0)),
 			p5.Vector.add(randVecAuto(20), vec(30, 30)),
 			random(5, 30),
 			palette.CUBE
+		);
+	}
+
+	closestCube(target) {
+		let choice;
+		let maxD = width;
+		for (const cube of cubes.filter(c => c.pos.x > CENTER.x)) {
+			let d = cube.pos.dist(this.pos);
+			if (d < maxD) {
+				maxD = d;
+				choice = cube;
+			}
+		}
+		return choice;
+	}
+
+	renderPath() {
+		let con = this.connection;
+
+		strokeWeight(10);
+		stroke(this.decor);
+		if (con) {
+			let target = vadd(con.pos, vdiv(con.size, 2));
+			let origin = vadd(this.pos, vdiv(this.size, 2));
+
+			line(origin.x, origin.y, target.x, origin.y);
+			line(target.x, origin.y, target.x, target.y);
+		}
+
+	}
+
+	renderDecorations() {
+		strokeWeight(10);
+		stroke(this.decor);
+		const PADDING = 20;
+
+		noStroke();
+		fill(palette.BACKGROUND);
+		rect(
+			this.pos.x - PADDING / 2,
+			this.pos.y - PADDING / 2,
+			this.size.x + PADDING,
+			this.size.y + PADDING
 		);
 	}
 }

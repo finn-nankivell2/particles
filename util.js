@@ -31,7 +31,6 @@ function vdiv(a, b) {
 	return p5.Vector.div(a, b);
 }
 
-
 class Ticker {
 	constructor(tick, callback) {
 		this._tick = tick;
@@ -45,5 +44,33 @@ class Ticker {
 			this._tick = this.start;
 			this.callback();
 		}
+	}
+}
+
+
+class RaffleRandom {
+	constructor(lower, upper, step = 1) {
+		this.lower = lower;
+		this.upper = upper;
+		this.step = step;
+
+		this.numbers = [];
+		this.takenNumber = random(lower, (lower-upper)/step)*step;
+		this.takenOlder;
+
+		this.fillNumbers();
+	}
+
+	fillNumbers() {
+		for (let i=this.lower; i<this.upper; i+=this.step) {
+			this.numbers.push(i);
+		}
+	}
+
+	take() {
+		let rm = this.numbers.splice(random(0, this.numbers.length-1), 1)[0];
+		this.numbers.push(this.takenNumber);
+		this.takenNumber = rm;
+		return rm;
 	}
 }
