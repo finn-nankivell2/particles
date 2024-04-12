@@ -74,3 +74,31 @@ class RaffleRandom {
 		return rm;
 	}
 }
+
+
+class ShiftingGridBackground {
+	constructor(n = 10, c1 = null, c2 = null) {
+		c1 = c1 ?? color("#0a0a0a");
+		c2 = c2 ?? color("#292929");
+
+		this.colours = [];
+
+		for (let i = 0, len = n; i < len; i++) {
+			this.colours.push(lerpColor(c1, c2, Math.random()));
+		}
+	}
+
+	getColour(seed) {
+		return this.colours[(Math.abs(seed) % this.colours.length)];
+	}
+
+	update() {
+		let sq = height/15;
+		for (let y=0; y<height; y+=sq) {
+			for (let x=-sq; x<width+sq; x+=sq) {
+				let m = sq/2 + -((frameCount*10) % sq);
+				rect(x+m, 0, sq+1, height);
+			}
+		}
+	}
+}

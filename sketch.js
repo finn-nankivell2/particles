@@ -9,6 +9,7 @@ let lastCube;
 function setup() {
 	createCanvas(window.innerWidth, window.innerHeight);
 	angleMode(DEGREES);
+	frameRate(45);
 
 	let colours = [
 		"#ae6331",
@@ -23,7 +24,7 @@ function setup() {
 
 	palette = {
 		BLACK: color("#000000"),
-		BACKGROUND: color("#1f1f1f"),
+		BACKGROUND: color("#0a0a0a"),
 		// CUBE: color("#52528C"),
 		CUBE: color("#b31454"),
 
@@ -66,6 +67,7 @@ function setup() {
 		})
 	);
 
+
 	raffle = new RaffleRandom(0, height, 100);
 	CENTER = vec(width / 2, height / 2);
 }
@@ -73,20 +75,8 @@ function setup() {
 function draw() {
 	background(palette.BACKGROUND);
 
-	{
-		// let CA = lerpColor(palette.BACKGROUND, palette.GRAD1, 0.1);
-		// let CB = lerpColor(palette.BACKGROUND, palette.GRAD2, 0.1);
-
-		// let sq = height/15;
-		// // for (let y=0; y<height; y+=sq) {
-		// 	for (let x=-sq; x<width+sq; x+=sq) {
-		// 		let m = sq/2 + -((frameCount*10) % sq);
-		// 		let c = map(x+m, 0, width, 0, 1.0);
-
-		// 		fill(lerpColor(CA, CB, c));
-		// 		rect(x+m, 0, sq+1, height);
-		// 	}
-		// // }
+	for (const item of misc) {
+		item.update();
 	}
 
 	cubes.sort((a, b) => a.pos.dist(CENTER) < b.pos.dist(CENTER));
@@ -109,10 +99,6 @@ function draw() {
 
 	for (const cube of cubes) {
 		cube.renderTop();
-	}
-
-	for (const item of misc) {
-		item.update();
 	}
 
 	cubes = cubes.filter((cube) => cube.isOnscreen());

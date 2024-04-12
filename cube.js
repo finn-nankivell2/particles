@@ -116,30 +116,30 @@ class PseudoCube {
 		// Order of events
 		let ooe = [];
 
-		// LMFAO
-		if (displaced.y < CENTER.y) {
-			ooe.push(topmost);
-
-			if (displaced.x < CENTER.x) {
-				ooe.push(left);
-				ooe.push(right);
-			} else {
-				ooe.push(right);
-				ooe.push(left);
-			}
-
+		// case 1, top left
+		if (displaced.x < CENTER.x && displaced.y < CENTER.y) {
 			ooe.push(bottom);
-		} else {
+			ooe.push(right);
+		}
+		// case 2, top right
+		if (displaced.x > CENTER.x && displaced.y < CENTER.y) {
 			ooe.push(bottom);
-
-			if (displaced.x < CENTER.x) {
-				ooe.push(left);
-				ooe.push(right);
-			} else {
-				ooe.push(right);
-				ooe.push(left);
-			}
+			ooe.push(left);
+		}
+		// case 3, bottom left
+		if (displaced.x < CENTER.x && displaced.y > CENTER.y) {
 			ooe.push(topmost);
+			ooe.push(right);
+		}
+		// case 4, bottom right
+		if (displaced.x > CENTER.x && displaced.y > CENTER.y) {
+			ooe.push(topmost);
+			ooe.push(left);
+		}
+
+
+		if (displaced.x < displaced.y) {
+			ooe.push(ooe.shift());
 		}
 
 		for (let f of ooe) {
