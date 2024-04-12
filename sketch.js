@@ -54,10 +54,10 @@ function setup() {
 		new Ticker(3, () => {
 			cubes.push(
 				new ParticlePseudoCube(
-					vec(width + 200, raffle.take()),
+					vec(width + 200, height*0.1 + raffle.take()),
 					// vec(width + 200, randomGaussian(height/2, height/4)),
 					// vec(width + 200, random(0, height/20)*20),
-					vadd(vec(20, 20), randVec(80, 80)),
+					vadd(vec(width/80, width/80), randVec(width/25, width/25)),
 					vec(-10, 0),
 					random(5, 30),
 					palette.CUBE
@@ -68,7 +68,7 @@ function setup() {
 	);
 
 
-	raffle = new RaffleRandom(0, height, 100);
+	raffle = new RaffleRandom(0, height*0.8, height/10);
 	CENTER = vec(width / 2, height / 2);
 }
 
@@ -101,5 +101,5 @@ function draw() {
 		cube.renderTop();
 	}
 
-	cubes = cubes.filter((cube) => cube.isOnscreen());
+	cubes = cubes.filter((cube) => cube.isOOB());
 }

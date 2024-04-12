@@ -62,6 +62,10 @@ class PseudoCube {
 	}
 
 	renderSides() {
+		if (!this.isOnscreen()) {
+			return;
+		}
+
 		let pos = this.pos;
 		let size = this.size;
 		let [displaced, roof] = this.calcDisplacementAndRoof();
@@ -148,6 +152,10 @@ class PseudoCube {
 	}
 
 	renderTop() {
+		if (!this.isOnscreen()) {
+			return;
+		}
+
 		// Displaced vec
 		let [displaced, roof] = this.calcDisplacementAndRoof();
 		displaced.add(this.pos);
@@ -159,6 +167,16 @@ class PseudoCube {
 	update() {}
 
 	isOnscreen() {
+		let size = this.size;
+		return (
+			this.pos.x > -size.x &&
+			this.pos.x < width + size.x &&
+			this.pos.y > -size.y &&
+			this.pos.y < height + size.y
+		);
+	}
+
+	isOOB() {
 		let size = vmult(this.size, 10);
 		return (
 			this.pos.x > -size.x &&
