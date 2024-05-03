@@ -11,26 +11,35 @@ function randVecAuto(scalar) {
 	return vec(r, r);
 }
 
+// p5js's functions for creating and applying operations are not ergonomic and thus irritating to use
+// I created my own aliases
+
+// Create a vector with coords x, y and z
 function vec(x, y, z) {
 	return createVector(x, y, z);
 }
 
+// Add two vectors without mutating and return the result
 function vadd(a, b) {
 	return p5.Vector.add(a, b);
 }
 
+// Subtract two vectors without mutating and return the result
 function vsub(a, b) {
 	return p5.Vector.sub(a, b);
 }
 
+// Multiply two vectors without mutating and return the result
 function vmult(a, b) {
 	return p5.Vector.mult(a, b);
 }
 
+// Divide two vectors without mutating and return the result
 function vdiv(a, b) {
 	return p5.Vector.div(a, b);
 }
 
+// Class that runs a callback every N frames
 class Ticker {
 	constructor(tick, callback) {
 		this._tick = tick;
@@ -47,7 +56,7 @@ class Ticker {
 	}
 }
 
-
+// Class that generates non-consuective numbers at set intervals
 class RaffleRandom {
 	constructor(lower, upper, step = 1) {
 		this.lower = lower;
@@ -75,7 +84,7 @@ class RaffleRandom {
 	}
 }
 
-
+// Experiment with making a checkered background for the game that moves with the buildings. Didn't work out
 class ShiftingGridBackground {
 	constructor(n = 10, c1 = null, c2 = null) {
 		c1 = c1 ?? color("#0a0a0a");
